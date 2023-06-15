@@ -1,11 +1,11 @@
 <template>
-    <div class="category">
-        <h1>{{ categoryName }}</h1>
-        <div class="certificate">
-            <h4>{{ certificateName }}</h4>
+        <div class="container-main">
+            <div class="container">
+                <div class="certificate">
+                    <h3>{{ certificateName }}</h3>
+                </div>
+            </div>
         </div>
-        <hr>
-    </div>
 </template>
 
 <script>
@@ -17,3 +17,10 @@ export default {
     }
 }
 </script>
+
+<style>
+
+    .certificate{
+        margin: 12px;
+    }
+</style>
