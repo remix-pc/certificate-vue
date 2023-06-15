@@ -3,7 +3,7 @@
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <hr>
-    <HelloWorld msg="Teste"/>
+    <button @click="teste">Aperte</button>
   </div>
 </template>
 
@@ -15,6 +15,11 @@ export default {
   name: 'HomeView',
   components: {
     HelloWorld
+  },
+  methods: {
+    teste(){
+      this.axios.get("http://viacep.com.br/ws/01001000/json/").then(res => {console.log(res.data);}).catch(err => {console.log(err);})
+    }
   }
 }
 </script>

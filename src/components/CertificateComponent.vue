@@ -4,17 +4,16 @@
         <div class="certificate">
             <h4>{{ certificateName }}</h4>
         </div>
+        <hr>
     </div>
 </template>
 
 <script>
 export default {
     name: 'CertificateComponent',
-
     props:{
         categoryName: String,
         certificateName: String,
     }
-
 }
 </script>
