@@ -8,10 +8,10 @@
             "></CertificateComponentVue>
         </div>
       </div>
-      <button>Add new certificate</button>
+      <button v-if="isAdmin">Add new certificate</button>
       <hr>
     </div>
-    <button @click="teste">Aperte</button>
+    <button v-if="isAdmin" @click="addNewCategory">Add new Category</button>
   </div>
 </template>
 
@@ -31,14 +31,36 @@ export default {
       console.log(res.data);
       this.categories = res.data
     }).catch(err => { console.log(err); })
+
+    this.axios.get("https://localhost:7083/validate", this.req).then(res => {
+      console.log(res);
+      this.isAdmin = true
+    }).catch(err => {
+      console.log(err);
+      this.isAdmin = false
+    })
+
   },
   data() {
     return {
       categories: [],
+      showModal: false,
+      isAdmin: false,
+      req: this.$globalToken
     }
   },
   methods: {
-
+    addNewCategory(){
+      let nameCategory = prompt("Add new category")
+      this.axios.post("https://localhost:7083/api/category", {
+        name: nameCategory
+      }, this.req).then(res => {
+        console.log(res);
+        window.location.reload()
+      }).catch(err => {
+        console.log(err);
+      })
+    },
   }
 }
 </script>
