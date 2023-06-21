@@ -8,22 +8,28 @@
             "></CertificateComponentVue>
         </div>
       </div>
-      <button v-if="isAdmin">Add new certificate</button>
-      <hr>
+      <button @click="modalCertificate(category.id)" v-if="isAdmin" class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          Add new certificate
+        </span>
+      </button>
+      <hr class="w-full h-1 mx-auto bg-teal-200 rounded md:my-5 dark:bg-gray-700">
     </div>
     <div class="mt-24 flex items-center justify-center">
-      <button v-if="isAdmin" @click="addNewCategory" class="relative inline-flex p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"><span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+      <button v-if="isAdmin" @click="modalCategory" class="relative inline-flex p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"><span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
         Add new Category
       </span>
       </button>
     </div>
-    <CategoryModal v-if="showModal"></CategoryModal>
+    <CategoryModal v-if="showModalCategory"></CategoryModal>
+    <CertificateModal v-if="showModalCertificate" :id="this.id"></CertificateModal>
   </div>
 </template>
 
 <script>
 import CertificateComponentVue from '@/components/CertificateComponent.vue'
 import CategoryModal from '@/components/CategoryModal.vue'
+import CertificateModal from '@/components/CertificateModal.vue'
 // @ is an alias to /src
 //import HelloWorld from '@/components/HelloWorld.vue'
 
@@ -33,7 +39,8 @@ export default {
     //HelloWorld,
     CertificateComponentVue,
     // eslint-disable-next-line vue/no-unused-components
-    CategoryModal
+    CategoryModal,
+    CertificateModal
   },
   created() {
     this.axios.get("https://localhost:7083/api/category/certificate").then(res => {
@@ -53,24 +60,21 @@ export default {
   data() {
     return {
       categories: [],
-      showModal: false,
+      showModalCategory: false,
+      showModalCertificate: false,
       isAdmin: false,
-      req: this.$globalToken
+      req: this.$globalToken,
+      id: -1
     }
   },
   methods: {
-    addNewCategory(){
-      // let nameCategory = prompt("Add new category")
-      // this.axios.post("https://localhost:7083/api/category", {
-      //   name: nameCategory
-      // }, this.req).then(res => {
-      //   console.log(res);
-      //   window.location.reload()
-      // }).catch(err => {
-      //   console.log(err);
-      // })
-        this.showModal = true;
+    modalCategory(){
+        this.showModalCategory = true;
     },
+    modalCertificate(idCertificate){
+      this.id = idCertificate
+      this.showModalCertificate = true;
+    }
   }
 }
 </script>

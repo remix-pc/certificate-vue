@@ -19,7 +19,6 @@ export default {
 </script>
 
 <style>
-
     .certificate{
         margin: 12px;
     }
