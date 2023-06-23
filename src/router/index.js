@@ -52,6 +52,11 @@ const routes = [
     component: () => import("../views/Register.vue"),
     beforeEnter: AdminAuth,
   },
+  {
+    path: "/certificates/:id",
+    name: 'certificates',
+    component: () => import("../views/CertificatesView.vue")
+  }
 ];
 
 const router = createRouter({
