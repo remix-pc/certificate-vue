@@ -2,11 +2,10 @@
   <div class="home">
     <div v-for="category in categories" :key="category.id">
       <h1 class="text-4xl font-extrabold dark:text-white ml-2">{{ category.name }}</h1>
-      <div class="container">
+      <div class="grid gap-4 grid-cols-4">
         <div v-for="(certificate, index) in category.certificates" :key="certificate.id" class="certificate">
           <CertificateComponentVue v-if="index < 4" :certificateName="certificate.name" :certificateDescription="certificate.description" :certificateImage="certificate.imageCertificatePath
             "></CertificateComponentVue>
-          
         </div>
       </div>
       <button @click="modalCertificate(category.id)" v-if="isAdmin" class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm ml-3 mt-2 font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
@@ -24,7 +23,8 @@
       <hr class="w-full h-1 mx-auto bg-teal-200 rounded md:my-5 dark:bg-gray-700">
     </div>
     <div class="mt-24 flex items-center justify-center">
-      <button v-if="isAdmin" @click="modalCategory" class="relative inline-flex p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"><span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+      <button v-if="isAdmin" @click="modalCategory" class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
         Add new Category
       </span>
       </button>
