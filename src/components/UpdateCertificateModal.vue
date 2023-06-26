@@ -16,7 +16,7 @@
                                 Add new Certificate
                             </DialogTitle>
                             <div class="mt-2">
-                                <h1>Insert to data of the Certificate here:</h1>
+                                <h1>Insert to data of the Certificate here: </h1>
                                 <input type="text"
                                     class="mt-3  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     v-model="name" placeholder="Name" />
@@ -32,10 +32,19 @@
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                         id="file_input" type="file">
                                 </div>
+                                <div class="mb-4">
+                                    <label for="categories"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
+                                        option</label>
+                                    <select id="categories" 
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option v-for="category in categories" :key="category.id">{{ category.name }}</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="flex items-center justify-center">
-                                <button type="button" @click="register"
+                                <button type="button" @click="updateCertificate"
                                     class="rounded-md mr-4 border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
                                     Add
                                 </button>
@@ -54,7 +63,6 @@
 
 
 <script>
-
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from "@headlessui/vue"
 import { ref } from "vue"
 
@@ -71,44 +79,40 @@ export default {
 
     },
     props: {
-        id: Number
+        id: Number,
+        propName: String,
+        descriptionProp: String,
+        imageProp: String,
+        certificateIdProp: Number
+    },
+    created() {
+        this.axios.get("https://localhost:7083/api/category").then(res => {
+            this.categories = res.data
+        }).catch(err => {
+            console.log(err);
+        })
     },
     data() {
         return {
             closeModal: isOpen.value,
-            nameCertificate: '',
             req: this.$globalToken,
-            name: '',
-            description: '',
+            name: this.propName,
+            imageCertificatePath: this.imageProp,
+            description: this.descriptionProp,
             categoryId: this.id,
-            imageCertificatePath: '',
+            certificateId: this.certificateIdProp,
+            categories: [],
         }
     },
     methods: {
-        async register() {
-            try {
-                const resBody = await this.axios.post("https://localhost:7083/api/certificate", {
-                    name: this.name,
-                    description: this.description,
-                    imageCertificatePath: this.imageCertificatePath,
-                    categoryId: this.categoryId
-                }, this.req)
-                console.log(resBody);
-                const file = document.getElementById("file_input").files[0]
-                let formData = new FormData()
-                formData.append("objFile", file)
+        async update() {
 
-                const resImg = await this.axios.post(`https://localhost:7083/api/certificate/image/${resBody.data.id}`, formData, this.req)
-                console.log(resImg);
-                window.location.reload();
-            } catch (error) {
-                console.log(error);
-                window.location.reload();
-            }
         },
         closedModal() {
             window.location.reload()
         }
     }
 }
+
+
 </script>

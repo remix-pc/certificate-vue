@@ -4,7 +4,7 @@
       <h1 class="text-4xl font-extrabold dark:text-white ml-2">{{ category.name }}</h1>
       <div class="grid gap-4 grid-cols-4">
         <div v-for="(certificate, index) in category.certificates" :key="certificate.id" class="certificate">
-          <CertificateComponentVue v-if="index < 4" :certificateName="certificate.name" :certificateDescription="certificate.description" :certificateImage="certificate.imageCertificatePath
+          <CertificateComponentVue v-if="index < 4" :certificateName="certificate.name" :certificateDescription="certificate.description" :certificateId="certificate.id" :certificateImage="certificate.imageCertificatePath
             "></CertificateComponentVue>
         </div>
       </div>

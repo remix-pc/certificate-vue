@@ -3,7 +3,7 @@
         <h1 class="text-4xl font-extrabold dark:text-white ml-2 text-center my-5">{{ categoryName }}</h1>
         <div class="grid gap-4 grid-cols-3 mb-10">
             <div v-for="certificate in certificates" :key="certificate.id">
-                <CertificateComponent :certificateDescription="certificate.description"
+                <CertificateComponent :certificateDescription="certificate.description" :certificateId="certificate.id"
                     :certificateImage="certificate.imageCertificatePath"></CertificateComponent>
             </div>
         </div>
@@ -15,6 +15,8 @@
                     Add new certificate
                 </span>
             </button>
+            
+
         </div>
     </div>
 </template>
