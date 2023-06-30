@@ -36,9 +36,11 @@
                                     <label for="categories"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
                                         option</label>
-                                    <select id="categories" 
+                                    <select id="categories" @change="onChange($event)"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                            <option v-for="category in categories" :key="category.id">{{ category.name }}</option>
+                                        <option v-for="category in categories" :selected="categoryName == category.name"
+                                            :value="category.id" id="category" :key="category.id"> {{ category.name }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -61,7 +63,6 @@
     </TransitionRoot>
 </template>
 
-
 <script>
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from "@headlessui/vue"
 import { ref } from "vue"
@@ -82,30 +83,65 @@ export default {
         id: Number,
         propName: String,
         descriptionProp: String,
-        imageProp: String,
-        certificateIdProp: Number
+        certificateIdProp: Number,
+        categoryName: String
     },
     created() {
-        this.axios.get("https://localhost:7083/api/category").then(res => {
-            this.categories = res.data
+
+        this.axios.get(`https://localhost:7083/api/certificate/${this.certificateId}`).then(res => {
+            this.imageCertificatePath = res.data.imageCertificatePath
         }).catch(err => {
             console.log(err);
         })
+        this.axios.get("https://localhost:7083/api/category").then(res => {
+            this.categories = res.data
+            console.log(this.categories)
+        }).catch(err => {
+            console.log(err);
+        })
+        console.log(this.categoryId);
     },
     data() {
         return {
             closeModal: isOpen.value,
             req: this.$globalToken,
             name: this.propName,
-            imageCertificatePath: this.imageProp,
+            imageCertificatePath: '',
             description: this.descriptionProp,
             categoryId: this.id,
             certificateId: this.certificateIdProp,
             categories: [],
+            onChange(e) {
+                console.log(e.target.value)
+                this.categoryId = e.target.value
+            }
         }
     },
     methods: {
-        async update() {
+        async updateCertificate() {
+
+            try {
+                // eslint-disable-next-line no-unused-vars
+                const resBody = await this.axios.put(`https://localhost:7083/api/certificate/${this.certificateId}`, {
+                    id: this.certificateId,
+                    name: this.name,
+                    description: this.description,
+                    imageCertificatePath: this.imageCertificatePath,
+                    categoryId: this.categoryId
+                }, this.$globalToken)
+
+                const file = document.getElementById("file_input").files[0]
+
+                if (file != undefined) {
+                    let formData = new FormData()
+                    formData.append("objFile", file)
+                    await this.axios.post(`https://localhost:7083/api/certificate/image/${resBody.data.id}`, formData, this.$globalToken)
+                }
+
+                window.location.reload()
+            } catch (e) {
+                console.log(e);
+            }
 
         },
         closedModal() {
